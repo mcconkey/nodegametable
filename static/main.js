@@ -34,8 +34,8 @@ socket.on('syncSession', function (data) {
 
 socket.on('newCardPlayedOnTable', function (data) {
 
-    cardCol = data.cardCol;
-    cardsOnTableCol = data.cardsOnTableCol;
+   //cardCol = data.cardCol;
+    //cardsOnTableCol = data.cardsOnTableCol;
 
     DrawCardOnTable(data.newCard);
 });
@@ -166,7 +166,8 @@ function DrawCardOnTable(obj) {
             imgSrc = imgClub;
             cardColor = 'black';
             break;
-        case 'Spades': imgSpade;
+        case 'Spades':
+            imgSrc = imgSpade;
             cardColor = 'black';
             break;
     }

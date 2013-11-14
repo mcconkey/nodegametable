@@ -6,9 +6,9 @@ var CardDeck = function (){
     return this;
 };
 
-CardDeck.prototype.PutCardInDeck = function (cardSuite, cardFace) {
+CardDeck.prototype.PutCardInDeck = function (cardObj) {
     //code to put a card at the bottom of the deck
-    this.CardsInDeck.push({ suite: cardSuite, face: cardFace });
+    this.CardsInDeck.push(cardObj);
 };
 
 CardDeck.prototype.RemoveCardFromDeck = function (cardSuite, cardFace) {
@@ -16,7 +16,7 @@ CardDeck.prototype.RemoveCardFromDeck = function (cardSuite, cardFace) {
     this.CardsInDeck.push(cardInd, 1);
 };
 
-CardDeck.prototype.TakeTopCard = function(){
+CardDeck.prototype.DrawTopCard = function(){
     //take a card from the top of the deck and then remove it from the deck
    return this.CardsInDeck.pop();
 };
@@ -66,16 +66,20 @@ CardDeck.prototype.GetCard = function () {
 
  CardSuiteCol = [
     {
-        name: 'Hearts'
+        name: 'Hearts',
+        color: 'Red'
     },
     {
-        name: 'Diamonds'
+        name: 'Diamonds',
+        color: 'Red'
     },
     {
-        name: 'Clubs'
+        name: 'Clubs',
+        color: 'black'
     },
     {
-        name: 'Spades'
+        name: 'Spades',
+        color: 'black'
     }
 ];
 
@@ -83,18 +87,30 @@ CardDeck.prototype.GetCard = function () {
 
 
 CardDeck.prototype.BuildDeck = function () {
-    var some_r;
-
 
     for(var i =  0; i < CardFaceValue.length; i++){
         for(var j= 0; j < CardSuiteCol.length; j++){
             var objCard =  new Card();
-            objCard.init(CardFaceValue[i], CardSuiteCol[j].name);
+            objCard.init(CardFaceValue[i], CardSuiteCol[j]);
             this.CardsInDeck.push(objCard);
        }
     }
-  // this.CardsInDeck = CardFaceValue.length;
+
     return this;
+};
+
+CardDeck.prototype.Shuffle = function (){
+    if(this.CardsInDeck.length > 0){
+         this.CardsInDeck = shuffle(this.CardsInDeck);
+    }else{
+      console.log(this);
+    }
+    return this;
+};
+
+function shuffle(o){ //v1.0
+    for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
 };
 
 var Card = function () {
@@ -118,6 +134,9 @@ Card.prototype.flipCard = function(){
 
 exports.CardDeck = CardDeck;
 exports.BuildDeck = CardDeck.prototype.BuildDeck;
+exports.Shuffle = CardDeck.prototype.Shuffle;
+exports.CardsInDeck = CardDeck.CardsInDeck;
+exports.DrawTopCard = CardDeck.prototype.DrawTopCard;
 
 exports.RemoveCardFromDeck = CardDeck.prototype.RemoveCardFromDeck;
 exports.GetCard = CardDeck.prototype.GetCard;

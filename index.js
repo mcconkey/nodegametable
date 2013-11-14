@@ -12,7 +12,7 @@ var cardDeckLib = require('./static/cards/card.js');
 var playerCol = [];
 var seatCol = [];
 var cardDeck = new require('./static/cards/card.js').CardDeck();
-var deck = cardDeck.BuildDeck();
+var deck = cardDeck.BuildDeck().Shuffle();
 
 function testDeck(deck){
 
@@ -21,16 +21,14 @@ function testDeck(deck){
     console.log('========================');
     console.log(deck);
     var count;
-    //for(var i; deck.CardsInDeck[i]; i++){
-    //    console.log('card');
-    //}
-    //console.log(count);
+
 
 }
+
 testDeck(deck);
 
 
-var cardCol = cardDeck.CardsInPlay;
+//var cardCol = cardDeck.CardsInDeck;
 var cardsOnTableCol = [];
 
 server.listen(8080);
@@ -54,27 +52,30 @@ io.sockets.on('connection', function (socket) {
         //io.sockets.emit('newPlayer', { player: playerCol[playerCol.length - 1] });
 
         var cardObj = {};
-        if (cardCol.length > 0) {
+       // if (cardCol.length > 0) {
             logger.log('Drawing a card...');
-            cardObj = cardDeck.GetCard();
+            cardObj = cardDeck.DrawTopCard();
             cardsOnTableCol.push(cardObj);
-            logger.log('Drew a ' + cardObj.face + ' of ' + cardObj.suite.name + '!');
-        }
-        //io.sockets.emit('newCardPlayedOnTable', { cardCol: cardCol, cardsOnTableCol: cardsOnTableCol, newCard: cardObj });
+            logger.log('Drew a ' + cardObj.face + ' of ' + cardObj.suite.name + '. this is a '+ cardObj.suite.color+' card!');
+            console.log(cardDeck);
+       // }
+        io.sockets.emit('newCardPlayedOnTable', { newCard: cardObj });
 
     });
 
     socket.on('spawnCardRequest', function (data) {
         var cardObj = {};
-        logger.log('Cards In Play: ' + cardDeck.CardsInPlay.length + ', max cards playable: ' + cardDeck.maxCardsPlayable + '...Drawing a card...');
-        if (cardDeck.CardsInPlay.length != cardDeck.maxCardsPlayable) {
-            cardObj = cardDeck.GetCard();
-            cardsOnTableCol.push(cardObj);
-            logger.log('Drew a ' + cardObj.face + ' of ' + cardObj.suite.name + '!');
-            io.sockets.emit('newCardPlayedOnTable', { cardCol: cardCol, cardsOnTableCol: cardsOnTableCol, newCard: cardObj });
-        } else {
-            logger.log('No cards left to play!...');
+        if(cardDeck.CardsInDeck.length > 0 ){
+        cardObj = cardDeck.DrawTopCard();
+        cardsOnTableCol.push(cardObj);
+        logger.log('Drew a ' + cardObj.face + ' of ' + cardObj.suite.name + '!');
+        io.sockets.emit('newCardPlayedOnTable', { newCard: cardObj });
+
+        console.log('cards in deck: ' + cardDeck.CardsInDeck.length);
+        }else{
+            console.log('could not draw because there were no cards left.')
         }
+
     });
 
     socket.on('getUp', function (data) {
