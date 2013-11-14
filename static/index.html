@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Example WebApp</title>
+
+	<script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/kinetic-v4.7.4.min.js"></script>
+	<script src="/main.js"></script>
+	
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--	<button>Load Post</button>-->
+    <div id="gameBoard">
+
+
+    </div>
+    <div id="playerBoard">
+
+
+    </div>
+    <div id="controlDiv"><input type="button" id="btnPlayerConnect" value="Connect as Player" />
+        <input type="button" id="btnDisconnect" value="Disconnect" /><input type="text" id="txtPlayerName"/><input type="button" value="Toggle Screen" id="btnToggleScreen" />
+            <span id="ViewMode">Viewing Game Board</span>
+        <input type="button" id="btnSpawnCards" value="Spawn Cards" />
+    </div>
+</body>
+</html>
